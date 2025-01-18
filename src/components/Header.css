@@ -1,0 +1,11 @@
+.header {
+    padding: 10px;
+}
+
+
+
+.header_svg {
+    fill: currentColor;
+    height: 30px;
+    width: 30px;
+}
