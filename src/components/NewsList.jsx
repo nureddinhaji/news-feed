@@ -1,38 +1,22 @@
-import { Grid2 } from "@mui/material";
+import { Alert, Box, Grid2 } from "@mui/material";
 import NewsCard from "./NewsCard";
-import { useEffect, useState } from "react";
+import FacebookCircularProgress from "./CircularProgress";
+export default function NewsList({news, loading}) {
 
-export default function NewsList() {
-
-    const [news, setNews] = useState([]);
-
-    async function getNews() {
-        const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${import.meta.env.VITE_NEWS_API_KEY}`);
-        const data = await response.json();
-        const articles = data.articles;
-        console.log(articles)
-        return articles.map((article) => {
-            return (
-                {
-                    title: article.title,
-                    author: article.author,
-                    description: article.description,
-                    image: article.urlToImage,
-                    url: article.url,
-                    source: article.source.name,
-                    date: article.publishedAt
-                }
-            )
-        })
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+                <FacebookCircularProgress />
+            </Box>
+        )
     }
 
+    if(news.length === 0) {
+        return (
+            <Alert severity="error">There is no news.</Alert>
+        )
+    }
     
-    useEffect(() => {
-        getNews().then((data) => {
-            console.log(data)
-            setNews(data)});
-    }, [])
-
     return (
         <Grid2 container spacing={2} columns={{ xs: 1, sm: 2 }}>
             {news.map((article) => {
