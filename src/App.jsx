@@ -4,6 +4,9 @@ import Header from './components/Header'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import NewsList from './components/NewsList';
 import { useEffect, useState } from 'react';
+import { debounce } from './utils';
+import { getNews } from './services/newsApi';
+
 
 const theme = createTheme({
   typography: {
@@ -13,33 +16,11 @@ const theme = createTheme({
   },
 });
 
-
-
-
 function App() {
 
   const [news, setNews] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  async function getNews(searchQuery) {
-        const response = await fetch(`https://newsapi.org/v2/top-headlines?q=${searchQuery}&country=us&apiKey=${import.meta.env.VITE_NEWS_API_KEY}`);
-        const data = await response.json();
-        const articles = data.articles;
-        return articles.map((article) => {
-            return (
-                {
-                    title: article.title,
-                    author: article.author,
-                    description: article.description,
-                    image: article.urlToImage,
-                    url: article.url,
-                    source: article.source.name,
-                    date: article.publishedAt
-                }
-            )
-        })
-    }
-    
     useEffect(() => {
       setLoading(true);
         getNews("").then((data) => {
@@ -48,17 +29,26 @@ function App() {
         });
     }, [])
 
-  function searchHandler(searchQuery) {
+
+  // Create search handler function here since it needs access to state
+  const searchHandler = (searchQuery) => {
     setLoading(true);
     getNews(searchQuery).then((data) => {
-        setNews(data);
-        setLoading(false);
+      setNews(data);
+      setLoading(false);
     });
-  }
+  };
+
+  // Create debounced version
+  const debouncedSearchHandler = debounce(searchHandler, 1000);
+
+
+
+
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="md" sx={{ display:'flex', flexDirection: 'column', gap: 4}}>
-        <Header searchHandler={searchHandler} />
+        <Header searchHandler={debouncedSearchHandler} />
         <NewsList news={news} loading={loading}/>
       </Container>
     </ThemeProvider>
