@@ -1,4 +1,4 @@
- News Feed
+# News Feed
 
 This is a News Feed application built with React and Material-UI. It fetches and displays the latest news articles from various categories using the News API.
 
