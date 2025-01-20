@@ -1,8 +1,7 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Divider, Typography } from "@mui/material";
 
 export default function NewsCard({title, author, description, image, url, source, date}) {
-    console.log
-    return (
+  return (
         <Card>
             {image && <CardMedia sx={{ height: 250 }} image={image} title="green iguana"/>}
             <CardContent>

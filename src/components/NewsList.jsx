@@ -20,6 +20,9 @@ export default function NewsList({news, loading}) {
     return (
         <Grid2 container spacing={2} columns={{ xs: 1, sm: 2 }}>
             {news.map((article) => {
+                if(article.title === "[Removed]") {
+                    return null;
+                }
                 return (
                     <Grid2 key={JSON.stringify(article)} size={1}>
                         <NewsCard {...article}/>
