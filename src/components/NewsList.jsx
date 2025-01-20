@@ -1,13 +1,19 @@
-import { Alert, Box, Grid2 } from "@mui/material";
+import { Alert, Grid2 } from "@mui/material";
 import NewsCard from "./NewsCard";
-import FacebookCircularProgress from "./CircularProgress";
+import LoadingSkeleton from "./LoadingSkeleton";
 export default function NewsList({news, loading, error}) {
 
     if (loading) {
         return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>
-                <FacebookCircularProgress />
-            </Box>
+        <Grid2 container spacing={2} columns={{ xs: 1, sm: 2 }}>
+            {new Array(6).fill(0).map((_, index) => {
+                return (
+                    <Grid2 key={index} size={1}>
+                        <LoadingSkeleton />
+                    </Grid2>
+                )
+            })}
+        </Grid2>
         )
     }
 
