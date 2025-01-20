@@ -29,6 +29,7 @@ function App() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [label, setLabel] = useState("general");
 
   const pageNo = useRef(1);
   const querySearch = useRef("");
@@ -38,8 +39,7 @@ function App() {
   function loadNews() {
     setLoading(true);
     setError(null);
-    getNews(querySearch.current, pageNo.current).then((data) => {
-      console.log("occured error" + data)
+    getNews(querySearch.current, pageNo.current, label).then((data) => {
       setNews(data);
     }).catch((error) => {
       setError(error.message);
@@ -50,7 +50,7 @@ function App() {
 
     useEffect(() => {
       loadNews();
-    }, [])
+    }, [label])
 
 
   // Create search handler function here since it needs access to state
@@ -76,15 +76,18 @@ function App() {
     scrollToTop();
   }
 
+  const labelHandler = (e) => {
+    setLabel(e.target.value);
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="md" sx={{ display:'flex', flexDirection: 'column', gap: 4, mb:4}}>
-        <Header searchHandler={debouncedSearchHandler} />
+        <Header searchHandler={debouncedSearchHandler} label={label} labelHandler={labelHandler}/>
         <NewsList news={news} loading={loading} error={error}/>
         <Stack spacing={2} direction="row" useFlexGap sx={{ justifyContent: 'space-between'}}>
           <Button variant="contained" onClick={handlePrevious} disabled={pageNo.current === 1}>Previous</Button>
-          <Button variant="contained" onClick={handleNext} disabled={news.length < 10}>Next</Button>
+          <Button variant="contained" onClick={handleNext} disabled={error && news.length < 10}>Next</Button>
         </Stack>
       </Container>
     </ThemeProvider>
