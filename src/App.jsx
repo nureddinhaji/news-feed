@@ -28,6 +28,7 @@ function App() {
 
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const pageNo = useRef(1);
   const querySearch = useRef("");
@@ -36,8 +37,13 @@ function App() {
   // Function for load news
   function loadNews() {
     setLoading(true);
+    setError(null);
     getNews(querySearch.current, pageNo.current).then((data) => {
+      console.log("occured error" + data)
       setNews(data);
+    }).catch((error) => {
+      setError(error.message);
+    }).finally(() => {
       setLoading(false);
     });
   }
@@ -75,7 +81,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Container maxWidth="md" sx={{ display:'flex', flexDirection: 'column', gap: 4, mb:4}}>
         <Header searchHandler={debouncedSearchHandler} />
-        <NewsList news={news} loading={loading}/>
+        <NewsList news={news} loading={loading} error={error}/>
         <Stack spacing={2} direction="row" useFlexGap sx={{ justifyContent: 'space-between'}}>
           <Button variant="contained" onClick={handlePrevious} disabled={pageNo.current === 1}>Previous</Button>
           <Button variant="contained" onClick={handleNext} disabled={news.length < 10}>Next</Button>

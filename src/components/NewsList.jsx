@@ -1,13 +1,19 @@
 import { Alert, Box, Grid2 } from "@mui/material";
 import NewsCard from "./NewsCard";
 import FacebookCircularProgress from "./CircularProgress";
-export default function NewsList({news, loading}) {
+export default function NewsList({news, loading, error}) {
 
     if (loading) {
         return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>
                 <FacebookCircularProgress />
             </Box>
+        )
+    }
+
+    if(error) {
+        return (
+            <Alert severity="error">{error}</Alert>
         )
     }
 
